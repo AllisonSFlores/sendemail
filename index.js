@@ -28,17 +28,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 app.post('/', upload.single('file'), (req, res) => {});
 
-function createHtml(correo, pass) {
-    var texto = "<html><body><div><img src=" + "\"https://drive.google.com/uc?export=view&id=1Ab0xeq9NwHg78vk735gNMVtN1QEBrAtA\"" + "<p></p>" +
-        ">" + "Bienvenido Tu correo es: " + correo + "<p></p>" + "Tu contrasena es: " + pass + "</div>";
-    fs.writeFile('./documents/usuario.html', texto, error => {
-        if (error)
-            console.log(error);
-        else
-            console.log('El archivo fue creado');
-    });
-}
-
 app.post("/sendUser", [
     (req, res) => {
         createHtml(req.body.email, req.body.pass);
@@ -46,10 +35,9 @@ app.post("/sendUser", [
             from: "Teachable <teachableap@gmail.com>",
             to: req.body.email,
             subject: "Nuevo usuario",
-            text: "Grcias por registrarse",
-            attachments: [{
-                path: './documents/usuario.html'
-            }]
+            text: "Gracias por registrarse",
+            html: `<html><body><div><img src="https://drive.google.com/uc?export=view&id=1Ab0xeq9NwHg78vk735gNMVtN1QEBrAtA"
+            ><p></p>Bienvenido Tu correo es: ${correo} <p></p>Tu contrasena es: ${pass}</div>`,
         }
         transporter.transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -92,5 +80,5 @@ app.post("/send", [
     }
 ]);
 
-app.set('port',process.env.PORT || 3000)
+app.set('port', process.env.PORT || 3000)
 app.listen(app.get('port'), () => console.log("SERVIDOR EN PUERTO 3000"))
