@@ -31,6 +31,8 @@ app.post('/', upload.single('file'), (req, res) => {});
 app.post("/sendUser", [
     (req, res) => {
         createHtml(req.body.email, req.body.pass);
+        var correo = req.body.email;
+        var pass = req.body.pass;
         var mailOptions = {
             from: "Teachable <teachableap@gmail.com>",
             to: req.body.email,
